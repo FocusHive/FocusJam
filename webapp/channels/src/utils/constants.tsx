@@ -1073,8 +1073,8 @@ export const DraggingStateTypes = {
 };
 
 export const AboutLinks = {
-    TERMS_OF_SERVICE: 'https://mattermost.com/pl/terms-of-use/',
-    PRIVACY_POLICY: 'https://mattermost.com/pl/privacy-policy/',
+    TERMS_OF_SERVICE: 'https://focushive.com/terms-of-use/',
+    PRIVACY_POLICY: 'https://focushive.com/privacy-policy/',
 };
 
 export const CloudLinks = {
@@ -1162,7 +1162,7 @@ export const LicenseLinks = {
     UNSUPPORTED_UPGRADE_LINK: 'https://docs.mattermost.com/administration-guide/upgrade/enterprise-install-upgrade.html#upgrading-to-enterprise-edition-from-mattermost-team-edition',
 };
 
-export const MattermostLink = 'https://mattermost.com/';
+export const MattermostLink = 'https://focushive.com/';
 
 export const BillingSchemes = {
     FLAT_FEE: 'flat_fee',
