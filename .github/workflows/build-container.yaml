@@ -13,7 +13,7 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: focushive/focustalk-server
+  IMAGE_NAME: focushive/focusjam-server
 
 jobs:
   build:
@@ -81,14 +81,14 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: ./server/build
-          file: ./server/build/Dockerfile.focustalk
+          file: ./server/build/Dockerfile.focusjam
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
           build-args: |
-            FOCUSTALK_PACKAGE=file:///dist/focustalk-linux-amd64.tar.gz
+            FOCUSJAM_PACKAGE=file:///dist/focusjam-linux-amd64.tar.gz
 
       - name: Generate artifact attestation
         if: github.event_name != 'pull_request'

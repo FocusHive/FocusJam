@@ -1,17 +1,17 @@
-# Focus Talk Container Image
-# Built from source with Focus Talk branding
+# Focus Jam Container Image
+# Built from source with Focus Jam branding
 
 # First stage - Build environment
 FROM golang:1.22-bookworm AS go-builder
 
-WORKDIR /focustalk
+WORKDIR /focusjam
 
 # Copy server source
-COPY server/ /focustalk/server/
-COPY webapp/channels/dist/ /focustalk/webapp/channels/dist/
+COPY server/ /focusjam/server/
+COPY webapp/channels/dist/ /focusjam/webapp/channels/dist/
 
 # Build the server
-WORKDIR /focustalk/server
+WORKDIR /focusjam/server
 RUN make setup-go-work && make build-linux
 
 # Second stage - Package preparation
@@ -35,28 +35,28 @@ RUN apt-get update \
   tzdata \
   && rm -rf /var/lib/apt/lists/*
 
-# Set up focustalk user and directories
-RUN mkdir -p /focustalk/data /focustalk/plugins /focustalk/client/plugins /focustalk/bin \
-  && groupadd --gid ${PGID} focustalk \
-  && useradd --uid ${PUID} --gid ${PGID} --comment "" --home-dir /focustalk focustalk
+# Set up focusjam user and directories
+RUN mkdir -p /focusjam/data /focusjam/plugins /focusjam/client/plugins /focusjam/bin \
+  && groupadd --gid ${PGID} focusjam \
+  && useradd --uid ${PUID} --gid ${PGID} --comment "" --home-dir /focusjam focusjam
 
 # Copy built binary from go-builder
-COPY --from=go-builder /focustalk/server/dist/mattermost /focustalk/bin/focustalk
-COPY --from=go-builder /focustalk/server/config/config.json /focustalk/config/config.json
+COPY --from=go-builder /focusjam/server/dist/mattermost /focusjam/bin/focusjam
+COPY --from=go-builder /focusjam/server/config/config.json /focusjam/config/config.json
 
 # Copy webapp assets
-COPY --from=go-builder /focustalk/webapp/channels/dist /focustalk/client
+COPY --from=go-builder /focusjam/webapp/channels/dist /focusjam/client
 
 # Set permissions
-RUN chown -R focustalk:focustalk /focustalk
+RUN chown -R focusjam:focusjam /focusjam
 
 # Create PostgreSQL client SSL directory
-RUN mkdir -p /focustalk/.postgresql && chmod 700 /focustalk/.postgresql
+RUN mkdir -p /focusjam/.postgresql && chmod 700 /focusjam/.postgresql
 
 # Final stage using distroless
 FROM gcr.io/distroless/base-debian12
 
-ENV PATH="/focustalk/bin:${PATH}"
+ENV PATH="/focusjam/bin:${PATH}"
 ENV MM_SERVICESETTINGS_ENABLELOCALMODE="true"
 ENV MM_INSTALL_TYPE="docker"
 
@@ -82,20 +82,20 @@ COPY --from=packager /usr/lib/libwv.so* /usr/lib/
 COPY --from=packager /usr/lib/libtidy.so* /usr/lib/
 COPY --from=packager /usr/lib/libfontconfig.so* /usr/lib/
 
-# Copy Focus Talk from packager
-COPY --from=packager --chown=2000:2000 /focustalk /focustalk
+# Copy Focus Jam from packager
+COPY --from=packager --chown=2000:2000 /focusjam /focusjam
 
 # Create passwd file for distroless
-RUN echo "focustalk:x:2000:2000::/focustalk:/sbin/nologin" >> /etc/passwd
+RUN echo "focusjam:x:2000:2000::/focusjam:/sbin/nologin" >> /etc/passwd
 
-USER focustalk
+USER focusjam
 
 HEALTHCHECK --interval=30s --timeout=10s \
-  CMD ["/focustalk/bin/focustalk", "system", "status", "--local"]
+  CMD ["/focusjam/bin/focusjam", "system", "status", "--local"]
 
-WORKDIR /focustalk
-CMD ["/focustalk/bin/focustalk"]
+WORKDIR /focusjam
+CMD ["/focusjam/bin/focusjam"]
 
 EXPOSE 8065 8067 8074 8075
 
-VOLUME ["/focustalk/data", "/focustalk/logs", "/focustalk/config", "/focustalk/plugins", "/focustalk/client/plugins"]
+VOLUME ["/focusjam/data", "/focusjam/logs", "/focusjam/config", "/focusjam/plugins", "/focusjam/client/plugins"]
