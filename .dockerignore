@@ -1,33 +1,13 @@
 # Ignore everything by default
 *
 
-# Only include what we need for the build
-!server/
+# Include pre-built artifacts
+!server/dist/
+!server/config/config.json
 !webapp/channels/dist/
-
-# Ignore development and test files
-server/**/*_test.go
-server/**/testdata/
-server/**/mocks/
-
-# Ignore build artifacts that are regenerated
-server/bin/
-server/dist/
-
-# Ignore IDE and editor files
-.idea/
-.vscode/
-*.swp
-*.swo
 
 # Ignore git
 .git/
-.gitignore
 
 # Ignore CI/CD
 .github/
-.gitlab-ci.yml
-
-# Ignore documentation
-*.md
-docs/
