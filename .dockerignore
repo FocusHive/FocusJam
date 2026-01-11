@@ -1,13 +1,19 @@
 # Ignore everything by default
 *
 
-# Include pre-built artifacts
+# Include pre-built artifacts (must include parent directories)
+!server/
+server/*
 !server/dist/
+!server/config/
+server/config/*
 !server/config/config.json
+
+!webapp/
+webapp/*
+!webapp/channels/
+webapp/channels/*
 !webapp/channels/dist/
 
 # Ignore git
 .git/
-
-# Ignore CI/CD
-.github/
