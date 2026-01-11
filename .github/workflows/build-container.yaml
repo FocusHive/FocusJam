@@ -54,6 +54,16 @@ jobs:
           make build-linux
           make package-linux
 
+      - name: Free up disk space
+        run: |
+          # Remove node_modules after webapp build (not needed for Docker)
+          rm -rf webapp/node_modules
+          rm -rf webapp/channels/node_modules
+          # Clean up Go cache
+          go clean -cache
+          # Show disk space
+          df -h
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
