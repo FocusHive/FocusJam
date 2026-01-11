@@ -23,13 +23,15 @@ RUN apt-get update \
   && rm -rf /var/lib/apt/lists/*
 
 # Set up focusjam user and directories
-RUN mkdir -p /focusjam/data /focusjam/plugins /focusjam/client/plugins /focusjam/bin \
+RUN mkdir -p /focusjam/data /focusjam/plugins /focusjam/client/plugins /focusjam/bin /focusjam/config \
   && groupadd --gid ${PGID} focusjam \
   && useradd --uid ${PUID} --gid ${PGID} --comment "" --home-dir /focusjam focusjam
 
-# Copy pre-built server binary and config
+# Copy pre-built server binary
 COPY server/dist/mattermost /focusjam/bin/focusjam
-COPY server/config/config.json /focusjam/config/config.json
+
+# Copy docker config as default (will be overwritten by mounted config)
+COPY server/build/docker-preview/config_docker.json /focusjam/config/config.json
 
 # Copy pre-built webapp assets
 COPY webapp/channels/dist /focusjam/client

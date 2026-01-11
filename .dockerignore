@@ -5,9 +5,11 @@
 !server/
 server/*
 !server/dist/
-!server/config/
-server/config/*
-!server/config/config.json
+!server/build/
+server/build/*
+!server/build/docker-preview/
+server/build/docker-preview/*
+!server/build/docker-preview/config_docker.json
 
 !webapp/
 webapp/*
